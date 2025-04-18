@@ -15,7 +15,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Load CSV for case retrieval functionality
-existing_keywords_csv = "D:/Legal Documents/Final UI/extracted_cases_with_links.csv"  # Update with actual CSV path
+existing_keywords_csv = "extracted_cases_with_links.csv"  # Update with actual CSV path
 existing_df = pd.read_csv(existing_keywords_csv)
 
 # Load NLP model for case analysis functionality
