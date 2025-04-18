@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuriStation Home Page</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            background: url('/static/images/front.jpeg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            opacity: 0.9;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .navbar-wrapper {
+            background-color: #d9f5fc;
+            padding: 10px 0;
+            width: 100%;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .navbar li {
+            display: inline;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-items: center;
+            margin: 30px;
+        }
+        .card-container {
+            position: relative;
+            display: inline-block;
+        }
+        .card {
+            width: 200px;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #d7fff6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            line-height: 1.5;
+            padding: 5px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .case-hover-box {
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+            z-index: 10;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .card-container:hover .case-hover-box {
+            display: block;
+        }
+        .button-box, .law-section, .category-section, .faq-section {
+            text-align: left;
+            margin: 30px;
+            margin-left: 100px;
+        }
+        .button-large, .button-largelaw {
+            background-color: #d4f4f4;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .button-largelaw {
+            margin-left: 100px;
+            font-size: 17px;
+        }
+        .button-large {
+            font-size: 20px;
+        }
+        .law-marquee-container {
+            height: 80px;
+            overflow: hidden;
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            margin-left: 200px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .law-marquee {
+            position: absolute;
+            width: 100%;
+            animation: scrollUp 8s linear infinite;
+        }
+        @keyframes scrollUp {
+            0% { top: 100%; }
+            100% { top: -100%; }
+        }
+        .law-marquee p {
+            margin: 20px;
+        }
+        .faq-box {
+            width: 80%;
+            margin: 15px auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .faq-question {
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .faq-answer {
+            display: none;
+            padding: 0 15px 15px 15px;
+        }
+        .plus-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><a href="/">JuriStation: A Courtroom for Legal Documents</a></h1>
+</header>
+
+<div class="navbar-wrapper">
+    <ul class="navbar">
+        <a href="/case_analysis"><li>Summarize</li></a>
+        <a href="/case_retrieval"><li>Case Retrieval</li></a>
+    </ul>
+</div>
+
+<div class="button-box">
+    <button class="button-large">Case Spotlight</button>
+</div>
+
+<div class="container">
+    <div class="card-container">
+        <div class="card">Ram Pyarey vs State of UP</div>
+        <div class="case-hover-box">
+            <h3>Ram Pyarey vs State of UP</h3>
+            <p>A landmark judgment dealing with criminal appeal where the court evaluated witness credibility, procedural lapses, and clarified legal interpretations for future cases.</p>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card">Raja Khan vs State of Chhattisgarh</div>
+        <div class="case-hover-box">
+            <h3>Raja Khan vs State of Chhattisgarh</h3>
+            <p>This case elaborated on preventive detention and fundamental rights, discussing the importance of evidence in sustaining preventive actions.</p>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card">Vinubhai vs Income Tax Commissioner</div>
+        <div class="case-hover-box">
+            <h3>Vinubhai vs Commissioner of Income Tax</h3>
+            <p>A tax-related case clarifying rules on reassessment and procedural fairness under the Income Tax Act, with wide implications for taxpayers.</p>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card">Amaragouda vs Union of India</div>
+        <div class="case-hover-box">
+            <h3>Amaragouda vs Union of India</h3>
+            <p>The Supreme Court discussed administrative overreach and set boundaries for the central government's authority in inter-state disputes.</p>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card">Rina Kumari vs Dinesh Mahto</div>
+        <div class="case-hover-box">
+            <h3>Rina Kumari vs Dinesh Kumar Mahto</h3>
+            <p>A significant family law case focusing on divorce proceedings, alimony rights, and the welfare of children in contested separations.</p>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card">Inspector RPF vs Mathew Cherian</div>
+        <div class="case-hover-box">
+            <h3>Inspector RPF vs Mathew Cherian</h3>
+            <p>A case involving railway protection forces where the court decided on procedural irregularities and punishment proportionality principles.</p>
+        </div>
+    </div>
+</div>
+
+<div class="button-box">
+    <button class="button-large">Law Of The Day</button>
+</div>
+
+<div class="law-marquee-container">
+    <div class="law-marquee">
+        <p>Section 28 of the Right of Children to Free and Compulsory Education Act, 2009 prohibits teachers from giving private tuition or teaching. This section applies to government teachers.</p>
+        <p>Article 19(1)(a) of the Constitution of India guarantees citizens the freedom of speech and expression. This fundamental right allows citizens to express their opinions and ideas through speech, writing, pictures, and other means.</p>
+    </div>
+</div>
+
+<div class="button-box">
+    <button class="button-large">Categories of Law</button>
+</div>
+
+<div class="button-box">
+    <button class="button-largelaw"><a href="https://www.mha.gov.in/en/commoncontent/new-criminal-laws">Criminal Law</a></button>
+    <button class="button-largelaw"><a href="https://www.lawyered.in/legal-disrupt/articles/commercial-laws-india-your-business/">Business Law</a></button>
+    <button class="button-largelaw"><a href="https://blog.ipleaders.in/civil-law/">Civil Law</a></button>
+</div>
+
+<div class="button-box">
+    <button class="button-large">FAQ’s</button>
+</div>
+
+<div class="faq-section">
+    <div class="faq-box">
+        <div class="faq-question">
+            <span>1. Can we take legal actions against a friend who doesn't return our money?</span>
+            <span class="plus-icon">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>You can file a summary civil suit, a criminal breach of trust case, or send a legal notice. You may also recover the debt under the Indian Bankruptcy Code or Negotiable Instruments Act.</p>
+        </div>
+    </div>
+
+    <div class="faq-box">
+        <div class="faq-question">
+            <span>2. Is it legal to kill someone in self-defence in India?</span>
+            <span class="plus-icon">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Yes, the right to private defence allows this under extreme circumstances, as outlined under Sections 96–106 of the IPC.</p>
+        </div>
+    </div>
+
+    <div class="faq-box">
+        <div class="faq-question">
+            <span>3. How long does the Supreme Court take to complete litigation?</span>
+            <span class="plus-icon">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Admission hearing occurs in about 15 days. After admission, the second hearing is usually after 3 months. Detailed final hearings (if required) can take up to 3 years.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // FAQ toggle script
+    document.querySelectorAll('.faq-question').forEach(item => {
+        item.addEventListener('click', () => {
+            const answer = item.nextElementSibling;
+            const icon = item.querySelector('.plus-icon');
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.textContent = '+';
+            } else {
+                answer.style.display = 'block';
+                icon.textContent = '-';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

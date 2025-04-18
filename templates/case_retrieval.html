@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', sans-serif;
+            background: linear-gradient(to right,  #f5e0b7,  #f5e0b7);
+            color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .navbar-wrapper {
+            background-color: #d9f5fc;
+            padding: 10px 0;
+            width: 100%;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .navbar li {
+            display: inline;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 15px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        button:hover {
+            background: #d35400;
+            transform: scale(1.1);
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(217, 255, 251, 0.913);
+            border-radius: 10px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid rgb(0, 0, 0);
+        }
+        th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">JuriStation: A Courtroom for Legal Documents</a></h1>
+    </header>
+    
+    <div class="navbar-wrapper">
+        <ul class="navbar">
+            <a href="/case_analysis"><li>Summarize</li></a>
+            <a href="/case_retrieval"><li>Case Retrieval</li></a>
+        </ul>
+    </div>
+
+    <h1>Upload a PDF for Case Comparison</h1>
+    <div class="container">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="pdfFile" accept="application/pdf" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+    <h2>Matched Cases</h2>
+    <table id="resultsTable">
+        <thead>
+            <tr>
+                <th>Case No</th>
+                <th>Case Title</th>
+                <th>Summary</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Results will be inserted here dynamically -->
+        </tbody>
+    </table>
+    
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append("file", document.getElementById("pdfFile").files[0]);
+
+            fetch("/upload", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Debugging: Check the structure of data
+            let tbody = document.querySelector("#resultsTable tbody");
+            tbody.innerHTML = "";
+            if (!data.results || data.results.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='4'>No cases found</td></tr>";
+                return;
+            }
+            data.results.forEach(item => {
+                let row = `<tr>
+                    <td>${item.caseno}</td>
+                    <td>${item.title}</td>
+                    <td>${item.summary}</td>
+                    <td><a href="${item.link_column}" target="_blank"><button>⬇️ Download</button></a></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error("Error:", error));
+
+        });
+    </script>
+</body>
+</html>
