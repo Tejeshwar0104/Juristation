@@ -1,1 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>Courtroom Top View</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .navbar-wrapper {
+            background-color: #d9f5fc;
+            padding: 10px 0;
+            width: 100%;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .navbar li {
+            display: inline;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .upload-container {
+            position: relative;
+            width: 1000px;
+            height: 130px;
+            cursor: pointer;
+            margin-bottom: 70px;
+        }
+        .gavel {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .upload-container:hover .gavel {
+            transform: scale(1.1) rotate(-4deg);
+        }
+        .gavel::before {
+            content: '\2696\FE0F'; /* Unicode for ⚖️ (Scales of Justice) */
+            font-size: 50px;
+            color: #ff7eb3;
+            position: absolute;
+        }
+        .upload-container:hover .gavel::before {
+            transform: rotate(4deg);
+        }
+        /* input[type="file"] {
+            display: none;
+        } */
+        .progress-bar {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 0;
+            height: 5px;
+            background: #ff7eb3;
+            transition: width 1s ease;
+        }
+        .courtroom {
+            position: relative;
+            width: 1000px;
+            height: 1350px;
+            background: #d1ac6f;
+            border: 5px solid #8b5a2b;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 25px;
+        }
+
+        .header {
+            grid-column: 1 / 4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100px;
+            padding: 10px;
+            background: #8b5a2b;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .case-category {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .case-title {
+            flex-grow: 1;
+            text-align: center;
+        }
+        .court-name {
+            text-align: right;
+        }
+        .area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #000;
+            height: 100px;
+            background: #fff;
+            font-weight: bold;
+            position: relative;
+            padding: 20px;
+            text-align: center;
+        }
+        .area img {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+        }
+        .judge { grid-column: 1 / 4; background: #b22222; color: white; }
+        .judge img { width: 20%; height: 70%; }
+        /* Move witness stand up by using margin */
+        .witness { 
+            grid-column: 2 / 3; 
+            margin-top: -120px;
+            margin-left: 30%;
+            width: 30%;             
+        }
+        
+        .petitioner { grid-column: 1 / 2; position: relative; height: 30px; border-radius: 25px; }
+        .petitioner img { top: -40px; width: 30%; height: 80%; }
+        .petitionerlawyer { grid-column: 1 / 2; position: relative; height: 30px; border-radius: 25px; }
+        .defendant { grid-column: 3 / 4; position: relative; height: 30px; border-radius: 25px;}
+        .defendantlawyer { grid-column: 3 / 4; position: relative; height: 30px;border-radius: 25px; }
+        .defendant img { top: -40px; width: 30%; height: 80%; }
+        .empty { grid-column: 2 / 3; background: #ffffff00; border: 2px solid #00000000; border-radius: 25px;}
+        .empty img { width: 100%; height: 300%; margin-top: 50px; border-radius: 7%;}
+        .petitionerlawyer img { margin-top: -103px; width: 30%; height: 200%; border: 2px solid #000000;}
+        .defendantlawyer img {margin-top: -103px; width: 30%; height: 200%; border: 2px solid #000000;}
+        .witness img {margin-top: 30px; width: 100%; height: 110%; border: 2px solid #000000;}
+        /* Move spectator stand to the bottom using margin */
+        .spectator { 
+            grid-column: 1 / 4; 
+            background: #ccc; 
+            position: relative; 
+            margin-top: 100px; 
+            height: 100px;
+            display: flex; 
+            padding-top: 20px;
+            justify-content: center; 
+            align-items: center;
+        }
+        /* Center spectator image */
+        .spectator img { 
+            position: static; 
+            transform: none; 
+            width: 75%; 
+            height: auto;
+        }
+        
+        .petitioner{
+            margin-top: -50px;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+        }
+        .defendant{
+            margin-top: -50px;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+        }
+
+        .petitionerlawyer {
+            margin-top: 40px;
+            cursor: pointer;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+        }
+
+        .defendantlawyer {
+            margin-top: 40px;
+            cursor: pointer;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+        }
+        .leftcontainer {
+            width: 150px;
+            height: 100px;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+            border: 5px solid #8b5a2b;
+            margin-left: -80%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000000;
+            border-radius: 25px;
+        }
+
+        .rightcontainer {
+            grid-column: 3/4; 
+            position: relative;
+            margin-top: -88%;
+            margin-left: 0%;
+            width: 170px;
+            height: 100px;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+            border: 5px solid #8b5a2b;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px;
+        }
+        
+        .crimecontainer {
+            margin-left: 60%;
+            position: relative;
+            margin-top: -40%;
+            width: 170px;
+            height: 70px;                        
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 25px;
+        }
+
+        .evidencecontainer {
+            margin-left: -30%;
+            position: relative;
+            margin-top: -40%;
+            width: 170px;
+            height: 70px;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 25px;
+        }
+
+        .casescitedcontainer {
+            position: relative;
+            margin-top: 20px;
+            width: 170px;
+            height: 130px;
+            background: linear-gradient(to bottom, #ffe5b4, #d1ac6f);
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 2;
+            cursor: pointer;
+            border-radius: 25px;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 10px;
+        }
+
+        .heading h1 {
+            margin-top: 50px;
+            font-family: 'Times New Roman';
+            font-size: 40px;
+            margin-bottom: 50px;
+        }
+
+        #submit {
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .containers {
+            position: relative;
+            width: 1000px;
+            height: 300px;
+            background: #d1ac6f;
+            border: 5px solid #8b5a2b;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto;
+            gap: 20px;
+            padding: 20px;
+            margin-top: 5%;
+            border-radius: 25px;
+        }
+
+        .output {
+            width: 900px;
+            height: 400px;
+            overflow: auto;
+            margin-top: 40px;
+            margin-left: -50px;
+        }
+
+        .output p {
+            height: 200px;
+            line-height: 2.5;
+        }
+        
+        </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">JuriStation: A Courtroom for Legal Documents</a></h1>
+    </header>
+    
+    <div class="navbar-wrapper">
+        <ul class="navbar">
+            <a href="/case_analysis"><li>Summarize</li></a>
+            <a href="/case_retrieval"><li>Case Retrieval</li></a>
+        </ul>
+    </div>
+    <div class="upload-container" onclick="document.getElementById('fileUpload').click()">
+        <div class="gavel"></div>
+        <form action="/case_analysis" method="post" enctype="multipart/form-data">
+        <input type="file" id="fileUpload" name="pdf">
+        <!-- <div class="progress-bar" id="progressBar"></div></form> -->
+    </div>
+    <button id="submit">Upload and Extract</button>
+
+    <div class="courtroom">
+        <div class="header">
+            <div class="case-category">
+                <img src="static/images/criminal.png" alt="Category Icon">
+                <span> {{ case_category }} </span>
+            </div>
+            <div class="case-title"> {{ case_number }}</div>
+            <div class="court-name">{{court_name}}</div>
+        </div>
+    
+        <div class="area judge"><img src="static/images/Judges.jpg" alt="Judge">
+            <div class="leftcontainer"> Punishment Details </div>
+        </div>
+        <div class="rightcontainer"> Verdict and Judgement </div>
+        <div class="crimecontainer">
+        <div class="crime"> Crime(s) </div>
+        </div>
+        <div class="area witness">Registrar / Typist <img src="static/images/typist.webp" alt="typist"></div>
+        <div class="evidencecontainer">
+            <div class="evidence"> Evidence(s) </div>
+            </div>
+        <div class="area petitioner"> {{petitioner}} <img src="static/images/petitioner.jpg" alt="Petitioner"></div>
+        <div class="area empty"><img src="static/images/lawyers_bench.png" alt="Lawyers Bench">
+            <div class="casescitedcontainer">Cases Law Cited / <br>Acts List</div>
+        </div>
+        <div class="area defendant">{{respondent}} <img src="static/images/petitioner.jpg" alt="Defendant"></div>
+        <div class="area petitionerlawyer">Petitioner Lawyer(s) <img src = 'static/images/lawyer.png' alt="Petitioner Lawyer"></div>
+        <div class="area defendantlawyer">Defendant Lawyer(s) <img src = 'static/images/lawyer.png' alt="Defendant Lawyer"></div>
+        <div class="area spectator"><img src="static/images/audience.png" alt="Spectators"></div>
+        
+        <div id="petitionerlawyerOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0, 0, 0, 0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="petcloseOverlay()">✖</div>
+                <br><h2>Petitioner Lawyer Details</h2>
+                <p style="text-align: center;">A lawyer representing a petitioner ensures that the petition is legally sound, well-structured,<br> <br><br>and effectively argues the case. </p>
+                <hr style="width:70%;text-align:left; justify-content: center; color:rgb(255, 0, 0);background-color:rgb(255, 0, 0)">
+                <p style="width: 840px; text-align: center; line-height: 2;">{{appellant_lawyer}}</p>
+            </div>
+        </div>
+
+        <div id="defendantlawyerOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="defcloseOverlay()">✖</div>
+                <br><h2>Defendant Lawyer Details</h2>
+                <p style="text-align: center;">A lawyer representing a defendant ensures that the petition is legally sound, well-structured,<br> <br><br>and effectively argues the case. </p>
+                <hr style="width:70%;text-align:left; justify-content: center; color:rgb(255, 0, 0);background-color:rgb(255, 0, 0)">
+                <p style="width: 840px; text-align: center; line-height: 2;">{{respondent_lawyer}}</p>
+            </div>
+        </div>
+
+        <div id="crimeOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="crimecloseOverlay()">✖</div>
+                <h2>Crime Details</h2>
+                    <p style="width: 840px; text-align: center; line-height: 2;">{{detected_crimes}}</p>
+            </div>
+        </div>
+
+        <div id="evidenceOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="evidencecloseOverlay()">✖</div>
+                <h2>Evidence submitted</h2>
+                <p style="width: 840px; text-align: center; line-height: 2;">{{ evidence }}</p>
+            </div>
+        </div>
+
+        <div id="verdictOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="verdictcloseOverlay()">✖</div>
+                <h2>Verdict or Final Judgement</h2>
+                <p style="width: 840px; text-align: center; line-height: 2;">{{ verdict }}</p>
+            </div>
+        </div>
+
+        <div id="punishmentOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="punishmentcloseOverlay()">✖</div>
+                <h2>Punishment Details</h2>
+                <p style="width: 840px; text-align: center; line-height: 2;">{{ judgement }}</p>
+            </div>
+        </div>
+
+        <div id="casescitedOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+            <div style="position: relative; width: 1000px; height: 800px; background: url('static/images/lawyers_bg.png') no-repeat center center / cover; border-radius: 15px; box-shadow: 0 0 20px #000; padding: 20px; color: rgb(0, 0, 0); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="position: absolute; top: 0px; right: 40px; font-size: 24px; cursor: pointer; color: rgb(255, 255, 255);" onclick="casescitedcloseOverlay()">✖</div>
+                <h3>Extracted Acts List</h3>    
+                <ul>
+                    {% for act in acts %}
+                    <li>{{ act }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>Cited Case Laws</h3>
+                <ul>
+                    {% for case in case_laws %}
+                    <li>{{ case }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="summary">
+        <div class="containers">
+            <p>Summary</p>
+            <div class="output"><p>{{ summary }}</p></div>
+            
+        </div>
+    </div>
+ 
+</body>
+<script>
+
+
+    document.querySelector('.defendantlawyer').addEventListener('click', function() {
+        document.getElementById('defendantlawyerOverlay').style.display = 'flex';
+    });
+    function defcloseOverlay() {
+        document.getElementById('defendantlawyerOverlay').style.display = 'none';
+    }
+    document.querySelector('.petitionerlawyer').addEventListener('click', function() {
+        document.getElementById('petitionerlawyerOverlay').style.display = 'flex';
+    });
+    function petcloseOverlay() {
+        document.getElementById('petitionerlawyerOverlay').style.display = 'none';
+    }
+    document.querySelector('.crimecontainer').addEventListener('click', function() {
+        document.getElementById('crimeOverlay').style.display = 'flex';
+    });
+    function crimecloseOverlay() {
+        document.getElementById('crimeOverlay').style.display = 'none';
+    }
+    document.querySelector('.evidencecontainer').addEventListener('click', function() {
+        document.getElementById('evidenceOverlay').style.display = 'flex';
+    });
+    function evidencecloseOverlay() {
+        document.getElementById('evidenceOverlay').style.display = 'none';
+    }
+    document.querySelector('.rightcontainer').addEventListener('click', function() {
+        document.getElementById('verdictOverlay').style.display = 'flex';
+    });
+    function verdictcloseOverlay() {
+        document.getElementById('verdictOverlay').style.display = 'none';
+    }
+    document.querySelector('.leftcontainer').addEventListener('click', function() {
+        document.getElementById('punishmentOverlay').style.display = 'flex';
+    });
+    function punishmentcloseOverlay() {
+        document.getElementById('punishmentOverlay').style.display = 'none';
+    }
+    document.querySelector('.casescitedcontainer').addEventListener('click', function() {
+        document.getElementById('casescitedOverlay').style.display = 'flex';
+    });
+    function casescitedcloseOverlay() {
+        document.getElementById('casescitedOverlay').style.display = 'none';
+    }
+</script>
+
+</html>
 
