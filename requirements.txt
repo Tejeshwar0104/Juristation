@@ -3,4 +3,4 @@ PyMuPDF==1.25.4
 spacy==3.8.4
 transformers==4.48.3
 pandas==2.2.2
-python -m spacy download en_core_web_sm
+python spacy download en_core_web_sm
