@@ -6,8 +6,8 @@ import os
 import spacy
 from collections import defaultdict
 from werkzeug.utils import secure_filename
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from transformers import BartForConditionalGeneration
+# from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+# from transformers import BartForConditionalGeneration
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
@@ -284,19 +284,19 @@ def extract_context(text):
 
     return issues_text
 
-from transformers import AutoTokenizer, BartForConditionalGeneration
+# from transformers import AutoTokenizer, BartForConditionalGeneration
 
-# Load the tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained("facebook/bart-base")
-model = BartForConditionalGeneration.from_pretrained("facebook/bart-base")
+# # Load the tokenizer and model
+# tokenizer = AutoTokenizer.from_pretrained("facebook/bart-base")
+# model = BartForConditionalGeneration.from_pretrained("facebook/bart-base")
 
-model.eval() # Evaluate mode to avoid training
+# model.eval() # Evaluate mode to avoid training
 
-def generate_summary(text, max_length):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding="longest", max_length=1024)
-    summary_ids = model.generate(inputs["input_ids"], max_length=max_length, num_beams=4, early_stopping=True)
-    summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-    return summary
+# def generate_summary(text, max_length):
+#     inputs = tokenizer(text, return_tensors="pt", truncation=True, padding="longest", max_length=1024)
+#     summary_ids = model.generate(inputs["input_ids"], max_length=max_length, num_beams=4, early_stopping=True)
+#     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+#     return summary
 
 
 # Routes
@@ -344,14 +344,14 @@ def case_analysis():
             evidence = extract_evidence(text)
             case_number = petitioner + ' ' + 'Vs' + ' ' + respondent
             context = extract_context(text)
-            summary = generate_summary(context, max_length=(len(context.split())+50))
+            # summary = generate_summary(context, max_length=(len(context.split())+50))
             
             return render_template('case_analysis.html', case_number=case_number, case_category=case_category, court_name=court_name,
                                    judgment_date=judgment_date, petitioner=petitioner, respondent=respondent,
                                    judges_names=judges_names, appellant_lawyer=appellant_lawyer,
                                    respondent_lawyer=respondent_lawyer,
                                    acts=acts, case_laws=case_laws, judgement=judgement, detected_crimes=detected_crimes,
-                                   verdict=verdict, punishment=punishment, evidence=evidence, summary = summary)
+                                   verdict=verdict, punishment=punishment, evidence=evidence)
     
     return render_template('case_analysis.html')
 
